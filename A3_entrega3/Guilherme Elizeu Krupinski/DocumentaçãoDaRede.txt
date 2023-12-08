@@ -1,0 +1,182 @@
+--------------------------------------------------------------
+R0
+
+interface Serial3/0
+	Rede: 10.20.2.0
+	Máscara: 255.255.255.248
+	IP: 10.20.2.4
+interface Serial2/0
+	Rede: 10.10.2.0
+	Máscara: 255.255.255.248
+	IP: 10.10.2.4
+
+interface GigabitEthernet9/0:
+
+rede filial A: 192.168.1.0/24
+	interface GigabitEthernet9/0.10
+	interface GigabitEthernet9/0.20
+	interface GigabitEthernet9/0.30
+	interface GigabitEthernet9/0.40
+
+
+sub-rede SPD: interface GigabitEthernet9/0.10
+	VLAN SPD - Setor Processamento de Dados
+	Rede:192.168.1.0
+	Máscara:255.255.255.224
+	1* IP:192.168.1.1
+	Ultimo IP:192.168.1.30
+	Broadcast:192.168.1.31
+
+		Gateway: 192.168.1.1
+		HTTP: 192.168.1.2
+		DNS: 192.168.1.3
+		EMAIL: 192.168.1.4
+		DHCP: 192.168.1.5
+
+sub-rede SC: interface GigabitEthernet9/0.20
+	VLAN SC - Setor Comercial
+	Rede: 192.168.1.32
+	Máscara:255.255.255.224
+	1* IP: 192.168.1.33
+	Ultimo IP: 192.168.1.62
+	Broadcast: 192.168.1.63
+
+		Gateway: 192.168.1.33
+
+sub-rede SDS: interface GigabitEthernet9/0.30
+	VLAN SDS - Setor de Desenvolvimento de Software
+	Rede: 192.168.1.64
+	Máscara: 255.255.255.192
+	1* IP: 192.168.1.65
+	Ultimo IP: 192.168.1.126
+	Broadcast:192.168.1.127
+
+		Gateway: 192.168.1.65
+
+sub-rede SSC: interface GigabitEthernet9/0.40
+	VLAN SSC - Setor Suporte ao Cliente
+	Rede: 192.168.1.128
+	Máscara:255.255.255.128
+	1* IP:192.168.1.129
+	Ultimo IP:192.168.1.254
+	Broadcast:192.168.1.255
+
+		Gateway: 192.168.1.129
+
+--------------------------------------------------------------
+
+R1
+
+interface Serial3/0
+	Rede: 10.20.1.0
+	Máscara: 255.255.255.248
+	IP: 10.20.1.1
+interface Serial2/0
+	Rede: 10.10.1.0
+	Máscara: 255.255.255.248
+	IP: 10.10.1.1
+
+interface GigabitEthernet9/0:
+
+rede filial B: 192.168.2.0/24
+	interface GigabitEthernet9/0.10
+	interface GigabitEthernet9/0.20
+
+sub-rede SA: interface GigabitEthernet9/0.10
+	VLAN SA - Setor Administrativo
+	Rede: 192.168.2.0
+	Máscara:255.255.255.128
+	1* IP: 192.168.2.1
+	Ultimo IP: 192.168.2.126
+	Broadcast: 192.168.2.127
+
+		Gateway: 192.168.2.1
+
+sub-rede Wifi: interface GigabitEthernet9/0.20
+	VLAN Wifi - Rede sem fio
+	Rede: 192.168.2.128
+	Máscara:255.255.255.128
+	1* IP: 192.168.2.129
+	Ultimo IP: 192.168.2.254
+	Broadcast: 192.168.2.255
+
+		Gateway: 192.168.2.129
+
+--------------------------------------------------------------
+
+R2
+
+interface Serial3/0
+	Rede: 10.20.2.0
+	Máscara: 255.255.255.248
+	IP: 10.20.2.3
+interface Serial2/0
+	Rede: 10.30.1.0
+	Máscara: 255.255.255.248
+	IP: 10.30.1.1
+interface Serial6/0
+	Rede: 10.20.1.0
+	Máscara: 255.255.255.248
+	IP: 10.20.1.2
+
+--------------------------------------------------------------
+
+R3
+
+interface Serial3/0
+	Rede: 10.10.1.0
+	Máscara: 255.255.255.248
+	IP: 10.10.1.2
+interface Serial2/0
+	Rede: 10.30.1.0
+	Máscara: 255.255.255.248
+	IP: 10.30.1.2
+interface Serial6/0
+	Rede: 10.10.2.0
+	Máscara: 255.255.255.248
+	IP: 10.10.2.3
+
+--------------------------------------------------------------
+
+Servidor HTTP: IP 192.168.1.3
+	design-tokens.css
+	index.html
+	login.css
+
+Servidor DNS: IP 192.168.1.4
+	ulife.com.br - apontando para 192.168.1.3(IP do Servidor HTTP)
+
+Servidor DHCP: IP 192.168.1.5
+	VLAN SC
+		Gateway: 192.168.1.33
+		DNS: 192.168.1.4
+		Start IP: 192.168.1.34
+		Mask: 255.255.255.224
+		Max User: 29
+	VLAN SDS
+		Gateway: 192.168.1.65
+		DNS: 192.168.1.4
+		Start IP: 192.168.1.66
+		Mask: 255.255.255.192
+		Max User: 61
+	VLAN SSC
+		Gateway: 192.168.1.129
+		DNS: 192.168.1.4
+		Start IP: 192.168.1.130
+		Mask: 255.255.255.128
+		Max User: 125
+
+Servidor EMAIL: IP 192.168.1.2
+	Nome do domínio: email.com
+	Usuarios - senhas:
+		pc3sc - 123
+		pc0sc - 123
+		pc4sc - 123
+		pc5sds - 123
+		pc1sds - 123
+		pc6sds - 123
+		pc7ssc - 123
+		pc2ssc - 123
+		pc8ssc - 123
+
+--------------------------------------------------------------
